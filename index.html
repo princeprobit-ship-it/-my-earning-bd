@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Earning BD</title>
+<style>
+:root {
+ --site-primary:#138b72; --site-on-primary:#ffffff;
+ --site-secondary:#e5f4ed; --site-on-secondary:#174b3d;
+ --site-background:#f5f8f6; --site-on-background:#20352d;
+ --site-font-body:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;
+ --site-font-heading:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;
+ --site-heading-scale:1; --site-spacing-scale:1; --site-radius-scale:1;
+ --site-decoration-opacity:1;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--site-background);color:var(--site-on-background);font-family:var(--site-font-body)}
+#app{min-height:100vh;width:100%;border-radius:0;background-color:var(--site-background);color:var(--site-on-background)}
+header{padding:18px max(18px,calc((100vw - 900px)/2));display:flex;justify-content:space-between;align-items:center;background:var(--site-primary);color:var(--site-on-primary)}
+.brand{font-weight:900;font-size:calc(22px * var(--site-heading-scale))}
+.pill{border:1px solid #ffffff88;border-radius:99px;padding:6px 11px;font-size:12px}
+nav{position:sticky;top:0;z-index:3;display:flex;gap:7px;overflow:auto;padding:10px max(14px,calc((100vw - 900px)/2));background:light-dark(#fff,#202b27);border-bottom:1px solid light-dark(#e2eae5,#3b4a42)}
+nav button{white-space:nowrap;border:0;border-radius:10px;padding:9px 12px;background:var(--site-secondary);color:var(--site-on-secondary);font:inherit;font-size:13px;font-weight:700}
+main{width:min(680px,100%);margin:auto;padding:26px 17px 44px}
+.intro{text-align:center;margin:12px 0 24px}
+h1{font-size:calc(27px * var(--site-heading-scale));color:var(--site-on-background);margin:0 0 8px}
+.intro p{color:light-dark(#75847c,#b7c5bd);line-height:1.8;margin:0}
+.login{background:light-dark(#fff,#202b27);border:1px solid light-dark(#e5ebe7,#3c4a42);border-top:7px solid var(--site-primary);border-radius:calc(25px * var(--site-radius-scale));padding:calc(25px * var(--site-spacing-scale));box-shadow:0 10px 26px #20352d12}
+.tag{display:inline-block;border-radius:99px;padding:5px 10px;background:var(--site-secondary);color:var(--site-on-secondary);font-size:11px;font-weight:800;margin-bottom:18px}
+label{display:block;font-size:14px;font-weight:700;margin:0 0 8px}
+input{width:100%;padding:15px;border:1px solid light-dark(#dce5df,#46574d);border-radius:13px;background:light-dark(#f8faf9,#17211c);color:var(--site-on-background);font:inherit;margin-bottom:18px}
+input:focus{outline:3px solid #138b7233;border-color:var(--site-primary)}
+.options{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:light-dark(#697970,#bdc9c2)}
+.options label{display:flex;align-items:center;gap:7px;font-weight:400;margin:0}
+.options input{width:auto;margin:0}
+a{color:var(--site-primary);font-weight:700;text-decoration:none}
+button{cursor:pointer;font:inherit;font-weight:700;border:0;border-radius:13px;padding:13px 16px}
+.primary{background:var(--site-primary);color:var(--site-on-primary)}
+.submit,.google{width:100%;margin-top:20px;padding:16px}
+.google{background:light-dark(#f4f7f5,#28352e);color:var(--site-on-background);border:1px solid light-dark(#dfe8e2,#46574d)}
+.or{text-align:center;color:#8a9990;margin:20px 0}
+.quick{margin-top:25px;padding:20px;border-radius:20px;background:var(--site-on-secondary);color:var(--site-secondary);line-height:1.8}
+.register{text-align:center;color:#75847c;margin:24px 0}
+.panel{display:none;background:light-dark(#fff,#202b27);border:1px solid light-dark(#e5ebe7,#3c4a42);border-radius:18px;padding:20px;margin-top:18px;line-height:1.8;scroll-margin-top:70px}
+.panel.active{display:block}
+.panel h2{margin-top:0}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{background:var(--site-secondary);color:var(--site-on-secondary);padding:14px;border-radius:13px}
+.tile strong{display:block;font-size:20px}
+.note{margin-top:20px;padding:14px;border-left:4px solid var(--site-primary);background:var(--site-secondary);color:var(--site-on-secondary);border-radius:9px;font-size:13px;line-height:1.7}
+.faq{padding:12px;border:1px solid light-dark(#e1eae4,#3b4a42);border-radius:12px;margin:10px 0}
+.faq summary{font-weight:700;cursor:pointer}
+footer{text-align:center;padding:22px;color:light-dark(#74837b,#b5c2bb);font-size:12px}
+.modal{display:none;position:fixed;inset:0;z-index:5;background:#0009;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.dialog{width:min(420px,100%);background:light-dark(#fff,#202b27);padding:22px;border-radius:18px;max-height:90vh;overflow:auto}
+.dialog h2{margin-top:0}
+@media(max-width:380px){.tiles{grid-template-columns:1fr}.login{padding:19px}}
+</style>
+</head>
+<body><div id="app">
+<header><div class="brand">▣ My Earning BD</div><span class="pill">ডেমো সংস্করণ</span></header>
+<nav aria-label="প্রধান মেনু">
+<button data-page="home">হোম</button><button data-page="dashboard">ড্যাশবোর্ড</button><button data-page="referral">রেফারেল</button><button data-page="learn">শিখুন</button><button data-page="help">সাহায্য</button><button data-page="privacy">গোপনীয়তা</button><button data-page="terms">শর্তাবলি</button>
+</nav>
+<main>
+<div class="intro"><h1>আপনার অ্যাকাউন্টে লগইন করুন</h1><p>আপনার ড্যাশবোর্ড, রেফারেল তথ্য ও অ্যাকাউন্টের নমুনা দেখুন।</p></div>
+<section class="login"><span class="tag">নিরাপদ ডেমো</span>
+<form id="login"><label for="phoneLogin">মোবাইল নম্বর</label><input id="phoneLogin" type="tel" placeholder="01XXXXXXXXX" autocomplete="off" inputmode="numeric">
+<label for="passLogin">পাসওয়ার্ড</label><input id="passLogin" type="password" placeholder="আপনার পাসওয়ার্ড লিখুন" autocomplete="off">
+<div class="options"><label><input type="checkbox" checked> আমাকে মনে রাখো</label><a href="#" id="forgot">পাসওয়ার্ড ভুলে গেছেন?</a></div>
+<button class="primary submit" type="submit">লগইন</button></form>
+<div class="or">অথবা</div><button class="google" id="google">🌐　গুগল দিয়ে চালিয়ে যান</button>
+</section>
+<div class="quick"><strong>দ্রুত ড্যাশবোর্ড অ্যাক্সেস</strong><br>লগইন করে এক জায়গা থেকে আপনার রেফারেল ও অ্যাকাউন্টের তথ্য দেখুন।</div>
+<div class="register">My Earning BD-তে নতুন? <a href="#" id="register">অ্যাকাউন্ট তৈরি করুন</a></div>
+<section class="panel" id="dashboard"><h2>ডেমো ড্যাশবোর্ড</h2><p>এটি নমুনা তথ্য; কোনো বাস্তব আয় বা লেনদেন দেখায় না।</p><div class="tiles"><div class="tile">অ্যাকাউন্ট অবস্থা<strong>ডেমো</strong></div><div class="tile">রেফারেল সদস্য<strong>০</strong></div><div class="tile">মোট আয়<strong>৳০</strong></div><div class="tile">পেমেন্ট<strong>বন্ধ</strong></div></div><button class="primary" id="back">লগইন পাতায় ফিরুন</button></section>
+<section class="panel" id="referral"><h2>রেফারেল তথ্য</h2><p>রেফারেল ব্যবস্থাটি এখন নমুনা হিসেবে দেখানো হচ্ছে। এখানে কোনো রেফারেল লিংক তৈরি, কমিশন বা অর্থ প্রদান হয় না।</p><p>বাস্তব সেবা চালুর আগে নিয়ম, গোপনীয়তা নীতি এবং নিরাপদ ব্যবস্থা নির্ধারণ করতে হবে।</p></section>
+<section class="panel" id="learn"><h2>শেখার বিভাগ</h2><p>ডিজিটাল দক্ষতা, অনলাইন নিরাপত্তা এবং দায়িত্বশীলভাবে ইন্টারনেট ব্যবহারের শিক্ষামূলক লেখা।</p><ul><li>অনলাইন অ্যাকাউন্ট নিরাপত্তা</li><li>শক্তিশালী পাসওয়ার্ড সম্পর্কে ধারণা</li><li>ভুয়া আয় ও প্রতারণামূলক অফার চেনা</li></ul></section>
+<section class="panel" id="help"><h2>সাহায্য কেন্দ্র</h2><details class="faq"><summary>এখানে কি সত্যি টাকা আয় করা যায়?</summary><p>না। এটি শেখার জন্য তৈরি ডেমো। বাস্তব আয়, কমিশন বা পেমেন্ট নেই।</p></details><details class="faq"><summary>লগইন বা অ্যাকাউন্ট তৈরি হচ্ছে না কেন?</summary><p>লগইন ও রেজিস্ট্রেশন বোতামগুলো শুধু ডিজাইনের নমুনা।</p></details><details class="faq"><summary>আমার তথ্য কি সংরক্ষণ করা হয়?</summary><p>না। কোনো তথ্য সার্ভারে পাঠানো বা সংরক্ষণ করা হয় না। আসল তথ্য লিখবেন না।</p></details><p><strong>নিরাপত্তা:</strong> কাউকে OTP, পাসওয়ার্ড, পরিচয়পত্র বা মোবাইল ব্যাংকিং PIN দেবেন না।</p></section>
+<section class="panel" id="privacy"><h2>গোপনীয়তা নীতি</h2><p>এই সংস্করণটি একটি ডেমো। কোনো নাম, মোবাইল নম্বর, ইমেইল বা পাসওয়ার্ড সার্ভারে পাঠানো বা সংরক্ষণ করা হয় না। বাস্তব ব্যক্তিগত তথ্য লিখবেন না।</p></section>
+<section class="panel" id="terms"><h2>ব্যবহারের শর্তাবলি</h2><ul><li>ওয়েবসাইটটি শিক্ষামূলক ডেমো মাত্র।</li><li>বাস্তব আয়, বিনিয়োগ, কমিশন বা পেমেন্টের প্রতিশ্রুতি নেই।</li><li>অনুমতি ছাড়া অন্যের তথ্য ব্যবহার করা যাবে না।</li></ul></section>
+<div class="note"><strong>ডেমো নোট:</strong> লগইন, Google প্রবেশ, পাসওয়ার্ড রিসেট, বাস্তব অ্যাকাউন্ট বা পেমেন্ট চালু নেই। এখানে আসল পাসওয়ার্ড বা ব্যক্তিগত তথ্য দেবেন না।</div>
+</main><footer>© 2026 My Earning BD · শেখার উদ্দেশ্যে তৈরি ডেমো</footer></div>
+<div class="modal" id="modal"><div class="dialog"><h2>ডেমো রেজিস্ট্রেশন</h2><p>এটি শুধু নমুনা ফর্ম; তথ্য কোথাও পাঠানো বা সংরক্ষণ করা হয় না।</p><form id="signup"><label for="nm">নাম</label><input id="nm" placeholder="নাম লিখুন" autocomplete="off"><label for="em">ইমেইল</label><input id="em" type="email" placeholder="name@example.com" autocomplete="off"><div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="close">বন্ধ</button><button class="primary" type="submit">ডেমো দেখুন</button></div></form></div></div>
+<script>
+const modal=document.getElementById('modal');
+document.getElementById('register').onclick=e=>{e.preventDefault();modal.classList.add('open')};
+document.getElementById('close').onclick=()=>modal.classList.remove('open');
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open')};
+document.getElementById('signup').onsubmit=e=>{e.preventDefault();alert('এটি ডেমো ফর্ম। কোনো অ্যাকাউন্ট তৈরি হয়নি।');modal.classList.remove('open')};
+document.getElementById('login').onsubmit=e=>{e.preventDefault();alert('এটি শুধু ডেমো। বাস্তব লগইন চালু নেই।')};
+document.getElementById('google').onclick=()=>alert('Google লগইন এখনো চালু হয়নি।');
+document.getElementById('forgot').onclick=e=>{e.preventDefault();alert('পাসওয়ার্ড রিসেট সুবিধা চালু হয়নি।')};
+function home(){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector('.intro').scrollIntoView({behavior:'smooth',block:'start'})}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{const id=b.dataset.page;if(id==='home'){home();return}document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})});
+document.getElementById('back').onclick=home;
+</script></body></html>
