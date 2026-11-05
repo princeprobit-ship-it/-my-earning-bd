@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probit BD</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#f1f6f7;
+ color:#17243d;
+ font-family:Arial,sans-serif;
+}
+header{
+ background:white;
+ padding:18px;
+ text-align:center;
+ color:#079879;
+ font-size:27px;
+ font-weight:bold;
+ position:sticky;
+ top:0;
+ z-index:5;
+}
+.banner{
+ background:#e3f7ff;
+ padding:14px;
+ text-align:center;
+ color:#176080;
+ font-size:14px;
+}
+main{
+ max-width:700px;
+ margin:auto;
+ padding:15px;
+ padding-bottom:110px;
+}
+.page{display:none}
+.page.active{display:block}
+.card{
+ background:white;
+ border-radius:28px;
+ padding:24px;
+ margin:18px 0;
+ box-shadow:0 8px 25px #17243d12;
+}
+.dark{
+ background:linear-gradient(120deg,#11192e,#087f72);
+ color:white;
+}
+.balance{
+ font-size:38px;
+ font-weight:bold;
+ margin:20px 0;
+}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+}
+.small{
+ background:white;
+ border-radius:20px;
+ padding:16px 8px;
+ text-align:center;
+ color:#8794a7;
+ font-size:14px;
+}
+.small strong{
+ display:block;
+ margin-top:12px;
+ color:#079879;
+ font-size:18px;
+}
+button{
+ border:0;
+ border-radius:15px;
+ padding:14px;
+ background:#079879;
+ color:white;
+ font-size:16px;
+ font-weight:bold;
+ cursor:pointer;
+}
+input{
+ width:100%;
+ padding:16px;
+ border:1px solid #ddd;
+ border-radius:14px;
+ margin:9px 0;
+ font-size:16px;
+}
+nav{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ background:white;
+ display:flex;
+ justify-content:space-around;
+ padding:10px 2px;
+ box-shadow:0 -5px 20px #0001;
+ z-index:10;
+}
+nav button{
+ background:white;
+ color:#8b98a9;
+ padding:8px 5px;
+ font-size:12px;
+}
+nav button.active{color:#079879}
+.link{
+ background:#eef9f6;
+ padding:15px;
+ border-radius:15px;
+ word-break:break-all;
+}
+.muted{color:#8794a7;font-size:14px}
+h2{text-align:center}
+.row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:16px 0;
+ border-bottom:1px solid #eee;
+}
+.profile-icon{
+ width:90px;
+ height:90px;
+ border-radius:50%;
+ background:#d7f5ed;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ font-size:45px;
+ margin:auto;
+}
+.taskbox{text-align:center;padding:30px 15px}
+</style>
+</head>
+
+<body>
+
+<header>🟢 PROBIT BD</header>
+
+<div class="banner">
+Probit BD — আপনার ড্যাশবোর্ড
+</div>
+
+<main>
+
+<!-- LOGIN -->
+<section id="login" class="page active">
+<div class="card">
+<h2>লগইন করুন</h2>
+
+<label>মোবাইল নম্বর</label>
+<input id="phone" type="tel"
+placeholder="01XXXXXXXXX">
+
+<label>পাসওয়ার্ড</label>
+<input id="password" type="password"
+placeholder="আপনার পাসওয়ার্ড লিখুন">
+
+<button style="width:100%" onclick="login()">
+লগইন অ্যাকাউন্ট
+</button>
+
+<p style="text-align:center">অথবা</p>
+
+<button style="width:100%;background:white;color:#17243d;border:1px solid #ddd"
+onclick="login()">
+Google দিয়ে চালিয়ে যান
+</button>
+
+<p class="muted" style="text-align:center">
+Probit BD-তে নতুন? অ্যাকাউন্ট তৈরি করুন।
+</p>
+</div>
+</section>
+
+<!-- HOME -->
+<section id="home" class="page">
+
+<div class="card dark">
+<h3>মোট সম্পদের মূল্য</h3>
+<div class="balance">৳ ০.০০</div>
+<p>আপনার Probit BD অ্যাকাউন্টের সম্পূর্ণ সারাংশ</p>
+</div>
+
+<div class="grid">
+
+<div class="small">
+উপলব্ধ
+<strong>৳ ০.০০</strong>
+</div>
+
+<div class="small">
+বেতন
+<strong>৳ ০.০০</strong>
+</div>
+
+<div class="small">
+রেফারেল
+<strong>৳ ০.০০</strong>
+</div>
+
+</div>
+
+<div class="card">
+<h2>রেফারেলের মাধ্যমে আরও আয় করুন</h2>
+
+<p class="link">
+https://probitbdx.com/ref/DEMO
+</p>
+
+<button style="width:100%" onclick="copyLink()">
+রেফারেল লিংক কপি করুন
+</button>
+
+<p class="muted" style="text-align:center">
+প্রতিটি সক্রিয় রেফারেলের জন্য ০ টাকা
+</p>
+</div>
+
+</section>
+
+<!-- WALLET -->
+<section id="wallet" class="page">
+
+<h2>ওয়ালেট</h2>
+
+<div class="card dark">
+<h3>মোট সম্পদ</h3>
+<div class="balance">৳ ০.০০</div>
+
+<div class="row">
+<span>মূল ব্যালেন্স</span>
+<strong>৳ ০.০০</strong>
+</div>
+
+<div class="row">
+<span>বেতন</span>
+<strong>৳ ০.০০</strong>
+</div>
+
+<div class="row">
+<span>রেফারেল</span>
+<strong>৳ ০.০০</strong>
+</div>
+</div>
+
+<div class="card">
+<h3>আজকের আয়</h3>
+<div class="balance">৳ ৪০.০০</div>
+</div>
+
+<div class="card">
+<h3>উপার্জনের ইতিহাস</h3>
+
+<div class="row">
+<span>মঙ্গলবার</span>
+<strong>৳ ০.০০</strong>
+</div>
+
+<div class="row">
+<span>বুধবার</span>
+<strong>৳ ০.০০</strong>
+</div>
+</div>
+
+</section>
+
+<!-- TASK -->
+<section id="task" class="page">
+
+<div class="card">
+<p style="color:#079879">
+Probit BD টাস্ক সেন্টার
+</p>
+
+<h2>বাক্য টাইপ করার কাজ</h2>
+
+<button>সক্রিয় উপার্জন</button>
+
+<div class="grid" style="margin-top:25px">
+
+<div class="small">
+আজকের আয়
+<strong>৳ ৪০.০০</strong>
+</div>
+
+<div class="small">
+সম্পন্ন হয়েছে
+<strong>২ / ২</strong>
+</div>
+
+</div>
+</div>
+
+<div class="card dark">
+<h3>প্রতি বাক্য পুরস্কার</h3>
+<div class="balance">৳ ২০.০০</div>
+<button>০টি বাক্য</button>
+</div>
+
+<div class="card taskbox">
+<div style="font-size:40px">☑️</div>
+<h2>আজ কাজ শেষ</h2>
+<p class="muted">
+নতুন টাস্ক উপলব্ধ হলে এখানে দেখাবে।
+</p>
+</div>
+
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+
+<div class="card" style="text-align:center">
+
+<div class="profile-icon">👤</div>
+
+<h2 id="username">Probit BD ব্যবহারকারী</h2>
+
+<p>📞 <span id="userphone">মোবাইল নম্বর</span></p>
+
+<button>যাচাইকৃত ব্যবহারকারী</button>
+</div>
+
+<div class="card">
+<h3>অ্যাকাউন্ট তথ্য</h3>
+
+<div class="row">
+<span>অ্যাকাউন্ট স্তর</span>
+<strong>সদস্য</strong>
+</div>
+
+<div class="row">
+<span>পদবি</span>
+<strong>প্রাইম সদস্য</strong>
+</div>
+</div>
+
+<div class="card dark">
+<h3>মোট রাজস্ব</h3>
+<div class="balance">৳ ০.০০</div>
+</div>
+
+<div class="grid">
+
+<div class="small">
+প্রধান
+<strong>৳ ০.০০</strong>
+</div>
+
+<div class="small">
+বেতন
+<strong>৳ ০.০০</strong>
+</div>
+
+<div class="small">
+রেফারেল
+<strong>৳ ০.০০</strong>
+</div>
+
+</div>
+
+<div class="card">
+<h3>আর্থিক পরিষেবা</h3>
+
+<div class="row">ওয়ালেট <span>›</span></div>
+<div class="row">স্থির বেতন <span>›</span></div>
+<div class="row">লিডারবোর্ড <span>›</span></div>
+<div class="row">ভিআইপি টাস্ক <span>›</span></div>
+<div class="row">রেকর্ড <span>›</span></div>
+<div class="row">আমার নেটওয়ার্ক <span>›</span></div>
+<div class="row">রিডিম কোড <span>›</span></div>
+</div>
+
+<div class="card">
+<h3>সমর্থন ও নিরাপত্তা</h3>
+
+<div class="row">গ্রাহক পরিষেবা <span>›</span></div>
+<div class="row">Probit BD অ্যাপ <span>›</span></div>
+<div class="row">মুদ্রা <span>BDT</span></div>
+<div class="row">ভাষা <span>বাংলা</span></div>
+<div class="row">নিরাপত্তা কেন্দ্র <span>›</span></div>
+</div>
+
+<div class="card">
+<button style="width:100%;background:#111827"
+onclick="logout()">
+নিরাপদ লগআউট
+</button>
+</div>
+
+</section>
+
+</main>
+
+<!-- BOTTOM MENU -->
+<nav id="navigation" style="display:none">
+
+<button class="active" onclick="showPage('home',this)">
+⌂<br>হোম
+</button>
+
+<button onclick="showPage('wallet',this)">
+▣<br>ওয়ালেট
+</button>
+
+<button onclick="showPage('task',this)">
+▣<br>কাজ
+</button>
+
+<button onclick="showPage('profile',this)">
+♙<br>প্রোফাইল
+</button>
+
+</nav>
+
+<script>
+
+function login(){
+
+let phone=document.getElementById("phone").value;
+let password=document.getElementById("password").value;
+
+if(!phone || !password){
+alert("মোবাইল নম্বর ও পাসওয়ার্ড লিখুন");
+return;
+}
+
+document.getElementById("username").innerText=
+"Probit BD ব্যবহারকারী";
+
+document.getElementById("userphone").innerText=phone;
+
+document.getElementById("navigation").style.display="flex";
+
+showPage("home",document.querySelector("nav button"));
+
+}
+
+function showPage(id,btn){
+
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active");
+});
+
+document.getElementById(id).classList.add("active");
+
+document.querySelectorAll("nav button").forEach(b=>{
+b.classList.remove("active");
+});
+
+btn.classList.add("active");
+
+window.scrollTo(0,0);
+
+}
+
+function logout(){
+
+document.getElementById("navigation").style.display="none";
+
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active");
+});
+
+document.getElementById("login").classList.add("active");
+
+}
+
+function copyLink(){
+
+let link="https://probitbdx.com/ref/DEMO";
+
+navigator.clipboard.writeText(link)
+.then(()=>alert("লিংক কপি হয়েছে"))
+.catch(()=>alert("লিংক কপি করা যায়নি"));
+
+}
+
+</script>
+
+</body>
+  </html>
+  
