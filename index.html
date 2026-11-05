@@ -138,6 +138,11 @@ h2{text-align:center}
  margin:auto;
 }
 .taskbox{text-align:center;padding:30px 15px}
+
+/* Netlify Badge Hide Code */
+#netlify-badge-container, .netlify-badge {
+    display: none !important;
+}
 </style>
 </head>
 
@@ -406,14 +411,14 @@ Probit BD টাস্ক সেন্টার
 
 <div class="row">গ্রাহক পরিষেবা <span>›</span></div>
 <div class="row">Probit BD অ্যাপ <span>›</span></div>
-<div class="row">মুদ্রา <span>BDT</span></div>
+<div class="row">মুদ্রা <span>BDT</span></div>
 <div class="row">ভাষা <span>বাংলা</span></div>
 <div class="row">নিরাপত্তা কেন্দ্র <span>›</span></div>
 </div>
 
 <div class="card">
 <button style="width:100%;background:#111827" onclick="logout()">
-নিরাপদ লগআউট
+নিরাপদ লগآউট
 </button>
 </div>
 
@@ -458,54 +463,6 @@ document.getElementById("userphone").innerText=phone;
 document.getElementById("navigation").style.display="flex";
 showPage("home",document.querySelector("nav button"));
 }
-
-function register(){
-let name=document.getElementById("reg-name").value;
-let phone=document.getElementById("reg-phone").value;
-let password=document.getElementById("reg-password").value;
-
-if(!name || !phone || !password){
-alert("সবগুলো তথ্য সঠিকভাবে পূরণ করুন");
-return;
-}
-
-alert("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! এবার লগইন করুন।");
-showLoginPage();
-document.getElementById("phone").value = phone;
-}
-
-function showRegisterPage(){
-document.querySelectorAll(".page").forEach(p=>{ p.classList.remove("active"); });
-document.getElementById("register").classList.add("active");
-}
-
-function showLoginPage(){
-document.querySelectorAll(".page").forEach(p=>{ p.classList.remove("active"); });
-document.getElementById("login").classList.add("active");
-}
-
-function showPage(id,btn){
-document.querySelectorAll(".page").forEach(p=>{ p.classList.remove("active"); });
-document.getElementById(id).classList.add("active");
-document.querySelectorAll("nav button").forEach(b=>{ b.classList.remove("active"); });
-btn.classList.add("active");
-window.scrollTo(0,0);
-}
-
-function logout(){
-document.getElementById("navigation").style.display="none";
-document.querySelectorAll(".page").forEach(p=>{ p.classList.remove("active"); });
-document.getElementById("login").classList.add("active");
-}
-
-function copyLink(){
-let link="https://netlify.app";
-navigator.clipboard.writeText(link)
-.then(()=>alert("লিংক কপি হয়েছে"))
-.catch(()=>alert("লিংক কপি করা যায়নি"));
-}
-
 </script>
-
 </body>
 </html>
