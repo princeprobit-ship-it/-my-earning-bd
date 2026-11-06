@@ -9,10 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Probit BD Backend Running!"
-  });
+  res.send("Probit BD Backend is Running!");
 });
 
 app.get("/api/health", (req, res) => {
@@ -21,6 +18,6 @@ app.get("/api/health", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Probit BD running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Probit BD running on port " + PORT);
 });
