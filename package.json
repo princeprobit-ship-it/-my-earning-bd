@@ -1,0 +1,16 @@
+
+{
+  "name": "probit-bd",
+  "version": "1.0.0",
+  "description": "Probit BD Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "@supabase/supabase-js": "^2.49.1"
+  }
+}
