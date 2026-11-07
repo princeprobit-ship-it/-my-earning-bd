@@ -1,0 +1,100 @@
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[c]);
+}
+
+async function loadWallet() {
+  if (!currentUser) return;
+
+  await refreshDashboard();
+
+  const { data, error } = await db
+    .from('transactions')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false })
+    .limit(30);
+
+  byId('transactions').innerHTML = error
+    ? 'লেনদেন লোড করা যায়নি: ' + escapeHtml(error.message)
+    : (data || []).map(t =>
+        `<div class="item">
+          <strong>${escapeHtml(t.type)} — ${money(t.amount)}</strong>
+          <small>${escapeHtml(t.status)} · ${t.created_at ? new Date(t.created_at).toLocaleString('bn-BD') : ''}</small>
+        </div>`
+      ).join('') || 'কোনো লেনদেন নেই';
+
+  const { data: w, error: we } = await db
+    .from('withdrawals')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  byId('withdrawals').innerHTML = we
+    ? 'উত্তোলনের তথ্য লোড করা যায়নি'
+    : (w || []).map(x =>
+        `<div class="item">
+          <strong>${money(x.amount)}</strong>
+          <small>${escapeHtml(x.method)} · ${escapeHtml(x.status)}</small>
+        </div>`
+      ).join('') || 'কোনো আবেদন নেই';
+}
+
+async function loadTasks() {
+  byId('taskList').innerHTML =
+    '<p class="muted">টাস্কের Database সংযোগ এখনো পরীক্ষা করা বাকি।</p>';
+  byId('taskStatusTitle').textContent = 'টাস্ক সেন্টার';
+  byId('taskStatusText').textContent = 'টাস্ক সিস্টেম প্রস্তুত করা হচ্ছে।';
+}
+
+async function loadAdmin() {
+  if (!isAdmin) return;
+
+  byId('adminWithdrawals').textContent =
+    'Admin Database সংযোগ পরীক্ষা করা বাকি।';
+  byId('adminTasks').textContent =
+    'Admin Task সংযোগ পরীক্ষা করা বাকি।';
+}
+
+async function logout() {
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    msg(error);
+    return;
+  }
+
+  currentUser = null;
+  currentProfile = null;
+  isAdmin = false;
+
+  byId('navigation').style.display = 'none';
+  byId('adminNav').classList.add('hidden');
+
+  showLoginPage();
+  alert('সফলভাবে লগআউট হয়েছে।');
+}
+
+// আগে থেকে লগইন করা থাকলে সেশন পুনরুদ্ধার
+db.auth.getSession().then(async ({ data, error }) => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  if (data.session) {
+    try {
+      await startApp(data.session.user);
+    } catch (e) {
+      console.error('Profile loading error:', e);
+      msg(e);
+    }
+  }
+});
