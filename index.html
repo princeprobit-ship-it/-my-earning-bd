@@ -5,464 +5,260 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Probit BD</title>
 <meta name="google-site-verification" content="k5MryDAjLAGk9ixe3GX6U2GqEooqCxraVhPu_T57MB8" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- background:#f1f6f7;
- color:#17243d;
- font-family:Arial,sans-serif;
-}
-header{
- background:white;
- padding:18px;
- text-align:center;
- color:#079879;
- font-size:27px;
- font-weight:bold;
- position:sticky;
- top:0;
- z-index:5;
-}
-.banner{
- background:#e3f7ff;
- padding:14px;
- text-align:center;
- color:#176080;
- font-size:14px;
-}
-main{
- max-width:700px;
- margin:auto;
- padding:15px;
- padding-bottom:110px;
-}
-.page{display:none}
-.page.active{display:block}
-.card{
- background:white;
- border-radius:28px;
- padding:24px;
- margin:18px 0;
- box-shadow:0 8px 25px #17243d12;
-}
-.dark{
- background:linear-gradient(120deg,#11192e,#087f72);
- color:white;
-}
-.balance{
- font-size:38px;
- font-weight:bold;
- margin:20px 0;
-}
-.grid{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:10px;
-}
-.small{
- background:white;
- border-radius:20px;
- padding:16px 8px;
- text-align:center;
- color:#8794a7;
- font-size:14px;
-}
-.small strong{
- display:block;
- margin-top:12px;
- color:#079879;
- font-size:18px;
-}
-button{
- border:0;
- border-radius:15px;
- padding:14px;
- background:#079879;
- color:white;
- font-size:16px;
- font-weight:bold;
- cursor:pointer;
-}
-input{
- width:100%;
- padding:16px;
- border:1px solid #ddd;
- border-radius:14px;
- margin:9px 0;
- font-size:16px;
-}
-nav{
- position:fixed;
- bottom:0;
- left:0;
- right:0;
- background:white;
- display:flex;
- justify-content:space-around;
- padding:10px 2px;
- box-shadow:0 -5px 20px #0001;
- z-index:10;
-}
-nav button{
- background:white;
- color:#8b98a9;
- padding:8px 5px;
- font-size:12px;
-}
+body{margin:0;background:#f1f6f7;color:#17243d;font-family:Arial,sans-serif}
+header{background:white;padding:18px;text-align:center;color:#079879;font-size:27px;font-weight:bold;position:sticky;top:0;z-index:5}
+.banner{background:#e3f7ff;padding:14px;text-align:center;color:#176080;font-size:14px}
+main{max-width:700px;margin:auto;padding:15px;padding-bottom:110px}
+.page{display:none}.page.active{display:block}
+.card{background:white;border-radius:28px;padding:24px;margin:18px 0;box-shadow:0 8px 25px #17243d12}
+.dark{background:linear-gradient(120deg,#11192e,#087f72);color:white}
+.balance{font-size:38px;font-weight:bold;margin:20px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.small{background:white;border-radius:20px;padding:16px 8px;text-align:center;color:#8794a7;font-size:14px}
+.small strong{display:block;margin-top:12px;color:#079879;font-size:18px}
+button{border:0;border-radius:15px;padding:14px;background:#079879;color:white;font-size:16px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+input,select,textarea{width:100%;padding:16px;border:1px solid #ddd;border-radius:14px;margin:9px 0;font-size:16px;background:white;color:#17243d}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px 2px;box-shadow:0 -5px 20px #0001;z-index:10}
+nav button{background:white;color:#8b98a9;padding:8px 5px;font-size:12px}
 nav button.active{color:#079879}
-.link{
- background:#eef9f6;
- padding:15px;
- border-radius:15px;
- word-break:break-all;
-}
-.muted{color:#8794a7;font-size:14px}
-h2{text-align:center}
-.row{
- display:flex;
- justify-content:space-between;
- align-items:center;
- padding:16px 0;
- border-bottom:1px solid #eee;
-}
-.profile-icon{
- width:90px;
- height:90px;
- border-radius:50%;
- background:#d7f5ed;
- display:flex;
- justify-content:center;
- align-items:center;
- font-size:45px;
- margin:auto;
-}
+.link{background:#eef9f6;padding:15px;border-radius:15px;word-break:break-all}
+.muted{color:#8794a7;font-size:14px}h2{text-align:center}
+.row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #eee;gap:12px}
+.profile-icon{width:90px;height:90px;border-radius:50%;background:#d7f5ed;display:flex;justify-content:center;align-items:center;font-size:45px;margin:auto}
 .taskbox{text-align:center;padding:30px 15px}
-
-/* Netlify Badge Hide Code */
-#netlify-badge-container, .netlify-badge {
-    display: none !important;
-}
+.notice{padding:12px 14px;border-radius:12px;background:#eef9f6;color:#087f72;margin:12px 0;font-size:14px}
+.error{background:#fff0f0;color:#b42318}.hidden{display:none!important}
+.item{padding:13px 0;border-bottom:1px solid #eee}
+.item:last-child{border:0}.item small{display:block;color:#8794a7;margin-top:5px}
+.admin-actions{display:flex;gap:8px;margin-top:10px}.admin-actions button{flex:1;padding:10px;font-size:13px}
+@media(max-width:380px){.grid{gap:6px}.small{padding:12px 4px;font-size:12px}.small strong{font-size:15px}.card{padding:18px}}
+#netlify-badge-container,.netlify-badge{display:none!important}
 </style>
 </head>
-
 <body>
-
 <header>🟢 PROBIT BD</header>
-
-<div class="banner">
-Probit BD — আপনার ড্যাশবোর্ড
-</div>
-
+<div class="banner">Probit BD — আপনার ড্যাশবোর্ড</div>
 <main>
-
-<!-- LOGIN -->
 <section id="login" class="page active">
-<div class="card">
-<h2>লগইন করুন</h2>
-
-<label>মোবাইল নম্বর</label>
-<input id="phone" type="tel" placeholder="01XXXXXXXXX">
-
-<label>পাসওয়ার্ড</label>
-<input id="password" type="password" placeholder="আপনার পাসওয়ার্ড লিখুন">
-
-<button style="width:100%" onclick="login()">
-লগইন অ্যাকাউন্ট
-</button>
-
-<p style="text-align:center">অথবা</p>
-
-<button style="width:100%;background:white;color:#17243d;border:1px solid #ddd" onclick="login()">
-Google দিয়ে চালিয়ে যান
-</button>
-
-<p class="muted" style="text-align:center; cursor:pointer; color:#079879; font-weight:bold;" onclick="showRegisterPage()">
-Probit BD-তে নতুন? অ্যাকাউন্ট তৈরি করুন।
-</p>
-</div>
+ <div class="card">
+  <h2>লগইন করুন</h2>
+  <label>মোবাইল নম্বর</label><input id="phone" type="tel" placeholder="01XXXXXXXXX" autocomplete="tel">
+  <label>পাসওয়ার্ড</label><input id="password" type="password" placeholder="আপনার পাসওয়ার্ড লিখুন" autocomplete="current-password">
+  <button id="loginBtn" style="width:100%" onclick="login()">লগইন অ্যাকাউন্ট</button>
+  <p style="text-align:center">অথবা</p>
+  <button style="width:100%;background:white;color:#17243d;border:1px solid #ddd" onclick="alert('Google Login চালু করতে Supabase Authentication-এ Google Provider configure করতে হবে।')">Google দিয়ে চালিয়ে যান</button>
+  <p class="muted" style="text-align:center;cursor:pointer;color:#079879;font-weight:bold" onclick="showRegisterPage()">Probit BD-তে নতুন? অ্যাকাউন্ট তৈরি করুন।</p>
+ </div>
 </section>
-
-<!-- REGISTER / SIGN UP -->
 <section id="register" class="page">
-<div class="card">
-<h2>নতুন অ্যাকাউন্ট তৈরি করুন</h2>
-
-<label>আপনার নাম</label>
-<input id="reg-name" type="text" placeholder="আপনার পুরো নাম লিখুন">
-
-<label>মোবাইল নম্বর</label>
-<input id="reg-phone" type="tel" placeholder="01XXXXXXXXX">
-
-<label>নতুন পাসওয়ার্ড</label>
-<input id="reg-password" type="password" placeholder="একটি শক্তিশালী পাসওয়ার্ড দিন">
-
-<button style="width:100%" onclick="register()">
-অ্যাকাউন্ট তৈরি করুন
-</button>
-
-<p class="muted" style="text-align:center; cursor:pointer; color:#079879; font-weight:bold;" onclick="showLoginPage()">
-ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন।
-</p>
-</div>
+ <div class="card">
+  <h2>নতুন অ্যাকাউন্ট তৈরি করুন</h2>
+  <label>আপনার নাম</label><input id="reg-name" type="text" placeholder="আপনার পুরো নাম লিখুন" autocomplete="name">
+  <label>মোবাইল নম্বর</label><input id="reg-phone" type="tel" placeholder="01XXXXXXXXX" autocomplete="tel">
+  <label>নতুন পাসওয়ার্ড</label><input id="reg-password" type="password" placeholder="কমপক্ষে ৬ অক্ষর" autocomplete="new-password">
+  <button id="registerBtn" style="width:100%" onclick="register()">অ্যাকাউন্ট তৈরি করুন</button>
+  <p class="muted" style="text-align:center;cursor:pointer;color:#079879;font-weight:bold" onclick="showLoginPage()">ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন।</p>
+ </div>
 </section>
-
-<!-- HOME -->
 <section id="home" class="page">
-
-<div class="card dark">
-<h3>মোট সম্পদের মূল্য</h3>
-<div class="balance">৳ ০.০০</div>
-<p>আপনার Probit BD অ্যাকাউন্টের সম্পূর্ণ সারাংশ</p>
-</div>
-
-<div class="grid">
-
-<div class="small">
-উপলব্ধ
-<strong>৳ ০.০০</strong>
-</div>
-
-<div class="small">
-বেতন
-<strong>৳ ০.০০</strong>
-</div>
-
-<div class="small">
-রেফারেল
-<strong>৳ ০.০০</strong>
-</div>
-
-</div>
-
-<div class="card">
-<h2>রেফারেলের মাধ্যমে আরও আয় করুন</h2>
-
-<p class="link">
-https://netlify.app
-</p>
-
-<button style="width:100%" onclick="copyLink()">
-রেফারেল লিংক কপি করুন
-</button>
-
-<p class="muted" style="text-align:center">
-প্রতিটি সক্রিয় রেফারেলের জন্য ০ টাকা
-</p>
-</div>
-
+ <div class="card dark"><h3>মোট সম্পদের মূল্য</h3><div class="balance" id="homeBalance">৳ ০.০০</div><p>আপনার Probit BD অ্যাকাউন্টের সম্পূর্ণ সারাংশ</p></div>
+ <div class="grid">
+  <div class="small">উপলব্ধ<strong id="homeAvailable">৳ ০.০০</strong></div>
+  <div class="small">উপার্জন<strong id="homeEarned">৳ ০.০০</strong></div>
+  <div class="small">রেফারেল<strong id="homeReferral">৳ ০.০০</strong></div>
+ </div>
+ <div class="card"><h2>রেফারেলের মাধ্যমে আরও আয় করুন</h2><p class="link" id="refLink">লিংক লোড হচ্ছে...</p>
+ <button style="width:100%" onclick="copyLink()">রেফারেল লিংক কপি করুন</button>
+ <p class="muted" style="text-align:center">প্রতি অনুমোদিত রেফারেলে ৳৩০ বোনাস</p></div>
 </section>
-
-<!-- WALLET -->
 <section id="wallet" class="page">
-
-<h2>ওয়ালেট</h2>
-
-<div class="card dark">
-<h3>মোট সম্পদ</h3>
-<div class="balance">৳ ০.০০</div>
-
-<div class="row">
-<span>মূল ব্যালেন্স</span>
-<strong>৳ ০.০০</strong>
-</div>
-
-<div class="row">
-<span>বেতন</span>
-<strong>৳ ০.০০</strong>
-</div>
-
-<div class="row">
-<span>রেফারেল</span>
-<strong>৳ ০.০০</strong>
-</div>
-</div>
-
-<div class="card">
-<h3>আজকের আয়</h3>
-<div class="balance">৳ ৪০.০০</div>
-</div>
-
-<div class="card">
-<h3>উপার্জনের ইতিহাস</h3>
-
-<div class="row">
-<span>মঙ্গলবার</span>
-<strong>৳ ০.০০</strong>
-</div>
-
-<div class="row">
-<span>বুধবার</span>
-<strong>৳ ০.০০</strong>
-</div>
-</div>
-
+ <h2>ওয়ালেট</h2>
+ <div class="card dark"><h3>মোট সম্পদ</h3><div class="balance" id="walletBalance">৳ ০.০০</div>
+  <div class="row"><span>মূল ব্যালেন্স</span><strong id="walletAvailable">৳ ০.০০</strong></div>
+  <div class="row"><span>মোট উপার্জন</span><strong id="walletEarned">৳ ০.০০</strong></div>
+  <div class="row"><span>রেফারেল</span><strong id="walletReferral">৳ ০.০০</strong></div>
+ </div>
+ <div class="card"><h3>টাকা উত্তোলন</h3>
+  <label>টাকার পরিমাণ (৳)</label><input id="withdrawAmount" type="number" min="1" step="1" placeholder="যেমন ২০০">
+  <label>মাধ্যম</label><select id="withdrawMethod"><option value="">মাধ্যম নির্বাচন করুন</option><option value="বিকাশ">বিকাশ</option><option value="নগদ">নগদ</option><option value="রকেট">রকেট</option></select>
+  <label>অ্যাকাউন্ট নম্বর</label><input id="withdrawAccount" type="tel" placeholder="01XXXXXXXXX">
+  <button style="width:100%" onclick="requestWithdrawal()">উত্তোলনের আবেদন করুন</button>
+  <p class="muted">আবেদন করলে টাকাটি সাময়িকভাবে ব্যালেন্স থেকে আটকে রাখা হবে।</p>
+ </div>
+ <div class="card"><h3>লেনদেনের ইতিহাস</h3><div id="transactions"><p class="muted">লোড হচ্ছে...</p></div></div>
+ <div class="card"><h3>আমার উত্তোলনের আবেদন</h3><div id="withdrawals"><p class="muted">লোড হচ্ছে...</p></div></div>
 </section>
-
-<!-- TASK -->
 <section id="task" class="page">
-
-<div class="card">
-<p style="color:#079879">
-Probit BD টাস্ক সেন্টার
-</p>
-
-<h2>বাক্য টাইপ করার কাজ</h2>
-
-<button>সক্রিয় উপার্জন</button>
-
-<div class="grid" style="margin-top:25px">
-
-<div class="small">
-আজকের আয়
-<strong>৳ ৪০.০০</strong>
-</div>
-
-<div class="small">
-সম্পন্ন হয়েছে
-<strong>২ / ২</strong>
-</div>
-
-</div>
-</div>
-
-<div class="card dark">
-<h3>প্রতি বাক্য পুরস্কার</h3>
-<div class="balance">৳ ২০.০০</div>
-<button>০টি বাক্য</button>
-</div>
-
-<div class="card taskbox">
-<div style="font-size:40px">☑️</div>
-<h2>আজ কাজ শেষ</h2>
-<p class="muted">
-নতুন টাস্ক উপলব্ধ হলে এখানে দেখাবে।
-</p>
-</div>
-
+ <div class="card"><p style="color:#079879">Probit BD টাস্ক সেন্টার</p><h2>বাক্য টাইপ করার কাজ</h2>
+  <div class="grid" style="margin-top:25px">
+   <div class="small">আজকের আয়<strong id="todayEarned">৳ ০.০০</strong></div>
+   <div class="small">সম্পন্ন হয়েছে<strong id="todayCount">০ / ২</strong></div>
+   <div class="small">প্রতি কাজ<strong>৳ ২০.০০</strong></div>
+  </div>
+ </div>
+ <div class="card"><h3>আজকের টাস্ক</h3><div id="taskList"><p class="muted">টাস্ক লোড হচ্ছে...</p></div></div>
+ <div class="card taskbox"><div style="font-size:40px">☑️</div><h2 id="taskStatusTitle">টাস্কের অবস্থা</h2><p class="muted" id="taskStatusText">আপনার টাস্কের তথ্য লোড হচ্ছে।</p></div>
 </section>
-
-<!-- PROFILE -->
 <section id="profile" class="page">
-
-<div class="card" style="text-align:center">
-
-<div class="profile-icon">👤</div>
-
-<h2 id="username">Probit BD ব্যবহারকারী</h2>
-
-<p>📞 <span id="userphone">মোবাইল নম্বর</span></p>
-
-<button>যাচাইকৃত ব্যবহারকারী</button>
-</div>
-
-<div class="card">
-<h3>অ্যাকাউন্ট তথ্য</h3>
-
-<div class="row">
-<span>অ্যাকাউন্ট স্তর</span>
-<strong>সদস্য</strong>
-</div>
-
-<div class="row">
-<span>পদবি</span>
-<strong>প্রাইম সদস্য</strong>
-</div>
-</div>
-
-<div class="card dark">
-<h3>মোট রাজস্ব</h3>
-<div class="balance">৳ ০.০০</div>
-</div>
-
-<div class="grid">
-
-<div class="small">
-প্রধান
-<strong>৳ ০.০০</strong>
-</div>
-
-<div class="small">
-বেতন
-<strong>৳ ০.০০</strong>
-</div>
-
-<div class="small">
-রেফারেল
-<strong>৳ ০.০০</strong>
-</div>
-
-</div>
-
-<div class="card">
-<h3>আর্থিক পরিষেবা</h3>
-
-<div class="row">ওয়ালেট <span>›</span></div>
-<div class="row">স্থির বেতন <span>›</span></div>
-<div class="row">লিডারবোর্ড <span>›</span></div>
-<div class="row">ভিআইপি টাস্ক <span>›</span></div>
-<div class="row">রেকর্ড <span>›</span></div>
-<div class="row">আমার নেটওয়ার্ক <span>›</span></div>
-<div class="row">রিডিম কোড <span>›</span></div>
-</div>
-
-<div class="card">
-<h3>সমর্থন ও নিরাপত্তা</h3>
-
-<div class="row">গ্রাহক পরিষেবা <span>›</span></div>
-<div class="row">Probit BD অ্যাপ <span>›</span></div>
-<div class="row">মুদ্রা <span>BDT</span></div>
-<div class="row">ভাষা <span>বাংলা</span></div>
-<div class="row">নিরাপত্তা কেন্দ্র <span>›</span></div>
-</div>
-
-<div class="card">
-<button style="width:100%;background:#111827" onclick="logout()">
-নিরাপদ লগآউট
-</button>
-</div>
-
+ <div class="card" style="text-align:center"><div class="profile-icon">👤</div><h2 id="username">Probit BD ব্যবহারকারী</h2><p>📞 <span id="userphone">মোবাইল নম্বর</span></p><button>যাচাইকৃত ব্যবহারকারী</button></div>
+ <div class="card"><h3>অ্যাকাউন্ট তথ্য</h3><div class="row"><span>অ্যাকাউন্ট স্তর</span><strong>সদস্য</strong></div><div class="row"><span>পদবি</span><strong>প্রাইম সদস্য</strong></div></div>
+ <div class="card dark"><h3>মোট ব্যালেন্স</h3><div class="balance" id="profileBalance">৳ ০.০০</div></div>
+ <div class="card"><h3>সমর্থন ও নিরাপত্তা</h3><div class="row">মুদ্রা <span>BDT</span></div><div class="row">ভাষা <span>বাংলা</span></div></div>
+ <div class="card"><button style="width:100%;background:#111827" onclick="logout()">নিরাপদ লগআউট</button></div>
 </section>
-
+<section id="admin" class="page">
+ <div class="card"><h2>Admin Dashboard</h2><p class="muted">শুধু অনুমোদিত Admin-এর জন্য</p></div>
+ <div class="card"><h3>Pending Withdrawals</h3><div id="adminWithdrawals">লোড হচ্ছে...</div></div>
+ <div class="card"><h3>Pending Task Submissions</h3><div id="adminTasks">টাস্কের তালিকা লোড হচ্ছে...</div></div>
+</section>
 </main>
-
-<!-- BOTTOM MENU -->
 <nav id="navigation" style="display:none">
-
-<button class="active" onclick="showPage('home',this)">
-⌂<br>হোম
-</button>
-
-<button onclick="showPage('wallet',this)">
-▣<br>ওয়ালেট
-</button>
-
-<button onclick="showPage('task',this)">
-▣<br>কাজ
-</button>
-
-<button onclick="showPage('profile',this)">
-♙<br>প্রোফাইল
-</button>
-
+ <button class="active" onclick="showPage('home',this)">⌂<br>হোম</button>
+ <button onclick="showPage('wallet',this)">▣<br>ওয়ালেট</button>
+ <button onclick="showPage('task',this)">▣<br>কাজ</button>
+ <button onclick="showPage('profile',this)">♙<br>প্রোফাইল</button>
+ <button id="adminNav" class="hidden" onclick="showPage('admin',this)">⚙<br>Admin</button>
 </nav>
-
 <script>
-
-function login(){
-let phone=document.getElementById("phone").value;
-let password=document.getElementById("password").value;
-
-if(!phone || !password){
-alert("মোবাইল নম্বর ও পাসওয়ার্ড লিখুন");
-return;
+const SUPABASE_URL = 'https://hpjutbhdljcttechlwce.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_zy_Z5WDk-6_uY2qX6QlNcg_YYy_9CfO';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentUser = null, currentProfile = null, isAdmin = false;
+const money = n => '৳ ' + Number(n || 0).toLocaleString('bn-BD',{minimumFractionDigits:2,maximumFractionDigits:2});
+const byId = id => document.getElementById(id);
+function msg(e){alert(e?.message || String(e || 'একটি সমস্যা হয়েছে'))}
+function normalizePhone(v){
+ let s=String(v||'').replace(/[^\d+]/g,'');
+ if(s.startsWith('+')) return s;
+ if(s.startsWith('880')) return '+'+s;
+ if(s.startsWith('0')) return '+88'+s;
+ return '+880'+s;
 }
-
-document.getElementById("username").innerText="Probit BD ব্যবহারকারী";
-document.getElementById("userphone").innerText=phone;
-document.getElementById("navigation").style.display="flex";
-showPage("home",document.querySelector("nav button"));
+function showOnly(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));byId(id).classList.add('active')}
+function showLoginPage(){showOnly('login')}
+function showRegisterPage(){showOnly('register')}
+function showPage(id,btn){
+ showOnly(id);
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ if(id==='wallet')loadWallet();
+ if(id==='task')loadTasks();
+ if(id==='admin'&&isAdmin)loadAdmin();
 }
+async function login(){
+ const phone=normalizePhone(byId('phone').value), password=byId('password').value;
+ if(!byId('phone').value.trim()||!password)return alert('মোবাইল নম্বর ও পাসওয়ার্ড লিখুন');
+ const b=byId('loginBtn');b.disabled=true;b.textContent='লগইন হচ্ছে...';
+ try{
+  const {data,error}=await db.auth.signInWithPassword({phone,password});
+  if(error)throw error;
+  await startApp(data.user);
+ }catch(e){msg(e)}finally{b.disabled=false;b.textContent='লগইন অ্যাকাউন্ট'}
+}
+async function register(){
+ const name=byId('reg-name').value.trim(), raw=byId('reg-phone').value.trim(), password=byId('reg-password').value;
+ if(!name||!raw||!password)return alert('সব তথ্য পূরণ করুন');
+ if(password.length<6)return alert('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে');
+ const b=byId('registerBtn');b.disabled=true;b.textContent='অ্যাকাউন্ট তৈরি হচ্ছে...';
+ try{
+  const phone=normalizePhone(raw);
+  const referral=new URLSearchParams(location.search).get('ref');
+  const {data,error}=await db.auth.signUp({phone,password,options:{data:{full_name:name,phone:phone,referral_code:referral}}});
+  if(error)throw error;
+  if(data.session){await startApp(data.user)}
+  else alert('রেজিস্ট্রেশন হয়েছে। Supabase Phone OTP চালু থাকলে SMS verification সম্পন্ন করে লগইন করুন।');
+ }catch(e){msg(e)}finally{b.disabled=false;b.textContent='অ্যাকাউন্ট তৈরি করুন'}
+}
+async function startApp(user){
+ currentUser=user;
+ const {data,error}=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();
+ if(error)throw error;
+ currentProfile=data;
+ if(!currentProfile){
+  const meta=user.user_metadata||{};
+  const {data:created,error:insertError}=await db.from('profiles').insert({id:user.id,full_name:meta.full_name||'Probit BD ব্যবহারকারী',phone:meta.phone||user.phone||''}).select().single();
+  if(insertError)throw insertError;
+  currentProfile=created;
+ }
+ byId('username').textContent=currentProfile.full_name||currentProfile.name||'Probit BD ব্যবহারকারী';
+ byId('userphone').textContent=currentProfile.phone||user.phone||'—';
+ byId('navigation').style.display='flex';
+ try{const {data:adminData}=await db.rpc('is_probit_admin');isAdmin=!!adminData}catch(_){isAdmin=false}
+ byId('adminNav').classList.toggle('hidden',!isAdmin);
+ showPage('home',document.querySelector('nav button'));
+ await refreshDashboard();
+}
+async function refreshDashboard(){
+ if(!currentUser)return;
+ const {data,error}=await db.from('profiles').select('*').eq('id',currentUser.id).single();
+ if(error){console.error(error);return}
+ currentProfile=data;
+ const balance=Number(data.balance||0), earned=Number(data.total_earned||data.earned||0), referral=Number(data.referral_earnings||data.referral_balance||0);
+ ['homeBalance','walletBalance','profileBalance'].forEach(id=>byId(id).textContent=money(balance));
+ ['homeAvailable','walletAvailable'].forEach(id=>byId(id).textContent=money(balance));
+ ['homeEarned','walletEarned'].forEach(id=>byId(id).textContent=money(earned));
+ ['homeReferral','walletReferral'].forEach(id=>byId(id).textContent=money(referral));
+ const refCode=data.referral_code||currentUser.id;
+ const link=location.origin+location.pathname+'?ref='+encodeURIComponent(refCode);
+ byId('refLink').textContent=link;
+}
+async function copyLink(){
+ const t=byId('refLink').textContent;
+ try{await navigator.clipboard.writeText(t);alert('রেফারেল লিংক কপি হয়েছে')}catch(_){prompt('লিংক কপি করুন',t)}
+}
+async function requestWithdrawal(){
+ const amount=Number(byId('withdrawAmount').value),method=byId('withdrawMethod').value,account=byId('withdrawAccount').value.trim();
+ if(!amount||amount<=0||!method||!account)return alert('সঠিক পরিমাণ, মাধ্যম ও অ্যাকাউন্ট নম্বর দিন');
+ try{
+  const {data,error}=await db.rpc('request_withdrawal',{p_amount:amount,p_method:method,p_account_number:account});
+  if(error)throw error;
+  alert('উত্তোলনের আবেদন জমা হয়েছে। Request ID: '+data);
+  byId('withdrawAmount').value='';byId('withdrawAccount').value='';
+  await refreshDashboard();await loadWallet();
+ }catch(e){msg(e)}
+}
+async function loadWallet(){
+ await refreshDashboard();
+ const {data,error}=await db.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(30);
+ if(error){byId('transactions').textContent='লেনদেন লোড করা যায়নি: '+error.message}else{
+  byId('transactions').innerHTML=data.length?data.map(t=>`<div class="item"><strong>${escapeHtml(t.type||'লেনদেন')} — ${money(t.amount)}</strong><small>${escapeHtml(t.status||'')} · ${t.created_at?new Date(t.created_at).toLocaleString('bn-BD'):''}</small></div>`).join(''):'কোনো লেনদেন নেই';
+ }
+ const {data:w,error:we}=await db.from('withdrawals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
+ byId('withdrawals').innerHTML=we?'উত্তোলনের তথ্য লোড করা যায়নি':(w.length?w.map(x=>`<div class="item"><strong>${money(x.amount)} · ${escapeHtml(x.method||'')}</strong><small>${escapeHtml(x.account_number||'')} · ${escapeHtml(x.status||'')} · ${x.created_at?new Date(x.created_at).toLocaleString('bn-BD'):''}</small></div>`).join(''):'কোনো আবেদন নেই');
+}
+async function loadTasks(){
+ // Task table/column structure may vary by project; show the user's existing submissions safely.
+ const {data,error}=await db.from('task_submissions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
+ if(error){byId('taskList').textContent='টাস্ক সাবমিশন লোড হয়নি। আপনার বর্তমান Backend-এর task table policy/schema অনুযায়ী সংযোগ প্রয়োজন।';return}
+ const approved=data.filter(x=>x.status==='approved');
+ byId('todayCount').textContent=approved.length+' / 2';
+ byId('todayEarned').textContent=money(approved.length*20);
+ byId('taskList').innerHTML=data.length?data.map(x=>`<div class="item"><strong>${escapeHtml(x.title||x.task_title||'টাস্ক জমা')}</strong><small>Status: ${escapeHtml(x.status||'pending')}</small></div>`).join(''):'এখনো কোনো টাস্ক জমা নেই';
+ byId('taskStatusTitle').textContent=data.length?'আপনার টাস্কের অবস্থা':'টাস্কের অপেক্ষায়';
+ byId('taskStatusText').textContent=data.length?'Admin অনুমোদনের পর পুরস্কার Backend থেকে যোগ হবে।':'নতুন টাস্ক উপলব্ধ হলে এখানে দেখাবে।';
+}
+async function loadAdmin(){
+ const {data:w,error}=await db.from('withdrawals').select('*').eq('status','pending').order('created_at',{ascending:true});
+ byId('adminWithdrawals').innerHTML=error?'Withdrawal লোড হয়নি: '+escapeHtml(error.message):(w.length?w.map(x=>`<div class="item"><strong>${money(x.amount)} — ${escapeHtml(x.method||'')}</strong><small>User: ${escapeHtml(x.user_id)} · ${escapeHtml(x.account_number||'')}</small><div class="admin-actions"><button onclick="adminWithdrawal(${x.id},'approve')">Approve</button><button style="background:#b42318" onclick="adminWithdrawal(${x.id},'reject')">Reject</button></div></div>`).join(''):'Pending withdrawal নেই');
+ const {data:t,error:te}=await db.from('task_submissions').select('*').eq('status','pending').order('created_at',{ascending:true});
+ byId('adminTasks').innerHTML=te?'Task submissions table/policy যাচাই প্রয়োজন':(t.length?t.map(x=>`<div class="item"><strong>${escapeHtml(x.title||x.task_title||'Task submission')}</strong><small>User: ${escapeHtml(x.user_id)} · ${escapeHtml(x.content||x.submission_text||'')}</small><small>Task approval RPC/DB function না জেনে এখানে approve button দেওয়া নিরাপদ নয়।</small></div>`).join(''):'Pending task নেই');
+}
+async function adminWithdrawal(id,action){
+ if(!confirm(action==='approve'?'এই Withdrawal অনুমোদন করবেন?':'এই Withdrawal বাতিল করে টাকা ফেরত দেবেন?'))return;
+ try{const {error}=await db.rpc(action==='approve'?'approve_withdrawal':'reject_withdrawal',{p_withdrawal_id:id});if(error)throw error;alert('সফল হয়েছে');await loadAdmin()}catch(e){msg(e)}
+}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function logout(){await db.auth.signOut();currentUser=null;currentProfile=null;isAdmin=false;byId('navigation').style.display='none';showLoginPage()}
+async function init(){
+ const {data:{session}}=await db.auth.getSession();
+ if(session?.user){try{await startApp(session.user)}catch(e){console.error(e);alert('প্রোফাইল লোড হয়নি: '+e.message)}}
+}
+db.auth.onAuthStateChange((_event,session)=>{if(!session){currentUser=null;byId('navigation').style.display='none';showLoginPage()}});
+init();
 </script>
 </body>
 </html>
