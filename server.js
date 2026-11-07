@@ -64,6 +64,62 @@ app.get("/api/db-check", async (req, res) => {
   }
 });
 
+// ==========================================
+// নতুন যুক্ত করা কোড: ওটিপি পাঠানোর এপিআই
+// ==========================================
+app.post("/api/send-otp", async (req, res) => {
+  try {
+    const { phone } = req.body; // ফ্রন্টএন্ড থেকে পাঠানো ফোন নম্বর
+
+    if (!phone) {
+      return res.status(400).json({ error: "ফোন নম্বর দেওয়া বাধ্যতামূলক" });
+    }
+
+    // Supabase দিয়ে ওটিপি পাঠানো (টেস্ট নম্বর হলে আসল SMS যাবে না)
+    const { data, error } = await supabase.auth.signInWithOtp({
+      phone: phone,
+    });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.json({ message: "ওটিপি সফলভাবে প্রসেস করা হয়েছে", data });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ==========================================
+// নতুন যুক্ত করা কোড: ওটিপি ভেরিফাই করার এপিআই
+// ==========================================
+app.post("/api/verify-otp", async (req, res) => {
+  try {
+    const { phone, token } = req.body; // ফ্রন্টএন্ড থেকে নম্বর এবং ওটিপি কোড
+
+    if (!phone || !token) {
+      return res.status(400).json({ error: "নম্বর এবং ওটিপি উভয়ই প্রয়োজন" });
+    }
+
+    // ওটিপি ভেরিফাই করা (লগইন বা রিসেট সেশন তৈরি হবে)
+    const { data, error } = await supabase.auth.verifyOtp({
+      phone: phone,
+      token: token,
+      type: "sms", // ফোন লগইনের জন্য টাইপ হবে sms
+    });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.json({ message: "লগইন সফল হয়েছে", session: data.session, user: data.user });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Server Start
 const PORT = process.env.PORT || 3000;
 
