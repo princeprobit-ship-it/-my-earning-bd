@@ -1,153 +1,139 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Micro Task Platform</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f0f2f5; margin: 0; padding: 20px; }
-    .container { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-    h2 { margin-top: 0; color: #333; text-align: center; }
-    .form-group { margin-bottom: 15px; }
-    input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-    button { width: 100%; background: #28a745; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    button:hover { background: #218838; }
-    .balance-card { background: linear-gradient(135deg, #007bff, #0056b3); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 25px; }
-    .balance-card h3 { margin: 0 0 5px 0; font-size: 16px; opacity: 0.9; }
-    .balance-card h1 { margin: 0; font-size: 32px; }
-    .task-item { border: 1px solid #e1e4e8; padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
-    .task-info h4 { margin: 0 0 5px 0; color: #1a1a1a; }
-    .task-info p { margin: 0; color: #28a745; font-weight: bold; font-size: 14px; }
-    .btn-task { width: auto; padding: 8px 16px; font-size: 14px; background: #007bff; }
-    .btn-task:hover { background: #0056b3; }
-    .hidden { display: none; }
-    .logout-btn { background: #dc3545; margin-top: 20px; }
-    .logout-btn:hover { background: #c82333; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro-Task Platform</title>
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2, h3 { text-align: center; color: #16a34a; }
+        input, button { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #16a34a; color: white; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background: #15803d; }
+        .btn-secondary { background: #2563eb; }
+        .btn-secondary:hover { background: #1d4ed8; }
+        .hidden { display: none; }
+        .form-box { margin-bottom: 15px; }
+    </style>
 </head>
 <body>
 
 <div class="container">
-  <div id="auth-section">
-    <h2>একাউন্টে প্রবেশ করুন</h2>
-    <div class="form-group">
-      <input type="email" id="email" placeholder="আপনার ইমেইল প্রদান করুন" />
-    </div>
-    <div class="form-group">
-      <input type="password" id="password" placeholder="পাসওয়ার্ড প্রদান করুন" />
-    </div>
-    <button onclick="handleAuth()">লগইন / রেজিস্ট্রেশন</button>
-  </div>
+    <h2>মাইক্রো-টাস্ক প্ল্যাটফর্ম</h2>
+    
+    <!-- Auth Section -->
+    <div id="auth-section">
+        <!-- Login Form -->
+        <div id="login-form" class="form-box">
+            <h3>একাউন্টে প্রবেশ করুন (লগইন)</h3>
+            <input type="email" id="login-email" placeholder="আপনার ইমেইল প্রদান করুন">
+            <input type="password" id="login-password" placeholder="পাসওয়ার্ড প্রদান করুন">
+            <button onclick="handleLogin()">লগইন</button>
+            <p style="text-align: center; font-size: 14px;">অ্যাকাউন্ট নেই? <a href="#" onclick="switchForm('signup')">রেজিস্ট্রেশন করুন</a></p>
+        </div>
 
-  <div id="dashboard-section" class="hidden">
-    <h2>ড্যাশবোর্ড</h2>
-    <div class="balance-card">
-      <h3>বর্তমান ব্যালেন্স</h3>
-      <h1 id="user-balance">৳ 0.00</h1>
+        <!-- Signup Form (Initially Hidden) -->
+        <div id="signup-form" class="form-box hidden">
+            <h3>নতুন অ্যাকাউন্ট তৈরি (রেজিস্ট্রেশন)</h3>
+            <input type="email" id="signup-email" placeholder="আপনার ইমেইল প্রদান করুন">
+            <input type="password" id="signup-password" placeholder="নতুন পাসওয়ার্ড তৈরি করুন">
+            <button class="btn-secondary" onclick="handleSignup()">রেজিস্ট্রেশন</button>
+            <p style="text-align: center; font-size: 14px;">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" onclick="switchForm('login')">লগইন করুন</a></p>
+        </div>
     </div>
 
-    <h3>উপলব্ধ টাস্কসমূহ</h3>
-    <div id="task-list"></div>
-
-    <button class="logout-btn" onclick="logout()">লগ আউট</button>
-  </div>
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="hidden">
+        <h3>স্বাগতম, <span id="user-email"></span></h3>
+        <button onclick="handleLogout()" style="background: #dc2626;">লগআউট</button>
+        <hr>
+        <h4>এভেইলেবল টাস্কসমূহ</h4>
+        <p>এই মুহূর্তে কোনো টাস্ক নেই।</p>
+    </div>
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://hpjutbhdljcttechlwce.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_zy_Z5WDk-6_uY2qX6QlNcg_YYy_9CfO'; 
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://hpjutbhdljcttechlwce.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_zy_Z5WDk-6_uY2qX6QlNcg_YYy_9CfO';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function handleAuth() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    if (!email || !password) {
-      alert('দয়া করে ইমেইল এবং পাসওয়ার্ড দিন।');
-      return;
+    // Form Switcher Function
+    function switchForm(type) {
+        if (type === 'signup') {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('signup-form').classList.remove('hidden');
+        } else {
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
     }
 
-    let { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    // Handle Login
+    async function handleLogin() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
 
-    if (error) {
-      const signupRes = await supabase.auth.signUp({ email, password });
-      if (signupRes.error) {
-        alert('ত্রুটি: ' + signupRes.error.message);
-        return;
-      }
-      alert('রেজিস্ট্রেশন সফল হয়েছে! এখন লগইন করুন।');
-      return;
+        if (!email || !password) {
+            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড উভয়ই প্রদান করুন।');
+            return;
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+            alert('লগইন ব্যর্থ হয়েছে: ' + error.message);
+        } else {
+            alert('সফলভাবে লগইন করা হয়েছে!');
+            checkUser();
+        }
     }
+
+    // Handle Signup
+    async function handleSignup() {
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password-email') || document.getElementById('signup-password').value;
+
+        if (!email || !password) {
+            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড উভয়ই প্রদান করুন।');
+            return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+            alert('রেজিস্ট্রেশন ব্যর্থ হয়েছে: ' + error.message);
+        } else {
+            alert('রেজিস্ট্রেশন সফল হয়েছে! অ্যাকাউন্ট অ্যাক্টিভ করতে ইমেইল চেক করুন (প্রয়োজনীয় হলে)।');
+            checkUser();
+        }
+    }
+
+    // Check User Session
+    async function checkUser() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            document.getElementById('user-email').innerText = session.user.email;
+        } else {
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
+        }
+    }
+
+    // Handle Logout
+    async function handleLogout() {
+        await supabase.auth.signOut();
+        checkUser();
+    }
+
+    // Check user state on load
     checkUser();
-  }
-
-  async function checkUser() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      document.getElementById('auth-section').classList.add('hidden');
-      document.getElementById('dashboard-section').classList.remove('hidden');
-      loadUserData(session.user.id);
-      loadTasks();
-    }
-  }
-
-  async function loadUserData(userId) {
-    let { data } = await supabase.from('profiles').select('balance').eq('id', userId).single();
-    if (data) {
-      document.getElementById('user-balance').innerText = '৳ ' + parseFloat(data.balance).toFixed(2);
-    }
-  }
-
-  async function loadTasks() {
-    let { data: tasks } = await supabase.from('tasks').select('*');
-    const taskContainer = document.getElementById('task-list');
-    taskContainer.innerHTML = '';
-
-    if (tasks) {
-      tasks.forEach(task => {
-        taskContainer.innerHTML += `
-          <div class="task-item">
-            <div class="task-info">
-              <h4>${task.title}</h4>
-              <p>পুরস্কার: ৳ ${parseFloat(task.reward).toFixed(2)}</p>
-            </div>
-            <button class="btn-task" onclick="completeTask(${task.reward})">কাজটি সম্পন্ন করুন</button>
-          </div>
-        `;
-      });
-    }
-  }
-
-  async function completeTask(reward) {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-
-    let { data } = await supabase.from('profiles').select('balance').eq('id', session.user.id).single();
-    let currentBalance = data ? parseFloat(data.balance) : 0;
-    let newBalance = (currentBalance + parseFloat(reward)).toFixed(2);
-
-    const { error } = await supabase.from('profiles').upsert({
-      id: session.user.id,
-      balance: newBalance,
-      email: session.user.email
-    });
-
-    if (!error) {
-      alert('টাস্ক সফলভাবে সম্পন্ন হয়েছে!');
-      loadUserData(session.user.id);
-    } else {
-      alert('সমস্যা হয়েছে: ' + error.message);
-    }
-  }
-
-  async function logout() {
-    await supabase.auth.signOut();
-    location.reload();
-  }
-
-  checkUser();
 </script>
+
 </body>
 </html>
