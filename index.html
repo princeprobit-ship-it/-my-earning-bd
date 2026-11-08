@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Micro-Task Platform</title>
-    <!-- Supabase CDN -->
+    <title>মাইক্রো-টাস্ক প্ল্যাটফর্ম</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; color: #333; }
@@ -35,11 +34,11 @@
             <p style="text-align: center; font-size: 14px;">অ্যাকাউন্ট নেই? <a href="#" onclick="switchForm('signup')">রেজিস্ট্রেশন করুন</a></p>
         </div>
 
-        <!-- Signup Form (Initially Hidden) -->
+        <!-- Signup Form -->
         <div id="signup-form" class="form-box hidden">
             <h3>নতুন অ্যাকাউন্ট তৈরি (রেজিস্ট্রেশন)</h3>
             <input type="email" id="signup-email" placeholder="আপনার ইমেইল প্রদান করুন">
-            <input type="password" id="signup-password" placeholder="নতুন পাসওয়ার্ড তৈরি করুন">
+            <input type="password" id="signup-password" placeholder="নতুন পাসওয়ার্ড তৈরি করুন (কমপক্ষে ৬ অক্ষর)">
             <button class="btn-secondary" onclick="handleSignup()">রেজিস্ট্রেশন</button>
             <p style="text-align: center; font-size: 14px;">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" onclick="switchForm('login')">লগইন করুন</a></p>
         </div>
@@ -47,7 +46,8 @@
 
     <!-- Dashboard Section -->
     <div id="dashboard-section" class="hidden">
-        <h3>স্বাগতম, <span id="user-email"></span></h3>
+        <h3>স্বাগতম!</h3>
+        <p>ইমেইল: <b id="user-email"></b></p>
         <button onclick="handleLogout()" style="background: #dc2626;">লগআউট</button>
         <hr>
         <h4>এভেইলেবল টাস্কসমূহ</h4>
@@ -56,12 +56,10 @@
 </div>
 
 <script>
-    // Supabase Configuration
     const SUPABASE_URL = 'https://hpjutbhdljcttechlwce.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_zy_Z5WDk-6_uY2qX6QlNcg_YYy_9CfO';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Form Switcher Function
     function switchForm(type) {
         if (type === 'signup') {
             document.getElementById('login-form').classList.add('hidden');
@@ -72,47 +70,51 @@
         }
     }
 
-    // Handle Login
     async function handleLogin() {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
 
         if (!email || !password) {
-            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড উভয়ই প্রদান করুন।');
+            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড প্রদান করুন।');
             return;
         }
 
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
         if (error) {
-            alert('লগইন ব্যর্থ হয়েছে: ' + error.message);
+            alert('লগইন ত্রুটি: ' + error.message);
         } else {
             alert('সফলভাবে লগইন করা হয়েছে!');
             checkUser();
         }
     }
 
-    // Handle Signup
     async function handleSignup() {
         const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password-email') || document.getElementById('signup-password').value;
+        const password = document.getElementById('signup-password').value;
 
         if (!email || !password) {
-            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড উভয়ই প্রদান করুন।');
+            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড প্রদান করুন।');
+            return;
+        }
+
+        if (password.length < 6) {
+            alert('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।');
             return;
         }
 
         const { data, error } = await supabase.auth.signUp({ email, password });
 
         if (error) {
-            alert('রেজিস্ট্রেশন ব্যর্থ হয়েছে: ' + error.message);
+            alert('রেজিস্ট্রেশন ত্রুটি: ' + error.message);
+        } else if (data.user && data.session === null) {
+            alert('রেজিস্ট্রেশন সফল হয়েছে! আপনার ইমেইল চেক করে অ্যাকাউন্ট ভেরিফাই করুন, অথবা Supabase থেকে Confirm email অফ করুন।');
         } else {
-            alert('রেজিস্ট্রেশন সফল হয়েছে! অ্যাকাউন্ট অ্যাক্টিভ করতে ইমেইল চেক করুন (প্রয়োজনীয় হলে)।');
+            alert('অ্যাকাউন্ট সফলভাবে তৈরি ও লগইন হয়েছে!');
             checkUser();
         }
     }
 
-    // Check User Session
     async function checkUser() {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
@@ -125,13 +127,11 @@
         }
     }
 
-    // Handle Logout
     async function handleLogout() {
         await supabase.auth.signOut();
         checkUser();
     }
 
-    // Check user state on load
     checkUser();
 </script>
 
