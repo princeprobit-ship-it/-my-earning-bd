@@ -6,16 +6,20 @@
     <title>মাইক্রো-টাস্ক প্ল্যাটফর্ম</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2, h3 { text-align: center; color: #16a34a; }
-        input, button { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 15px; color: #333; }
+        .container { max-width: 450px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2, h3 { text-align: center; color: #16a34a; margin-bottom: 15px; }
+        input, select, button, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { background: #16a34a; color: white; border: none; font-weight: bold; cursor: pointer; }
         button:hover { background: #15803d; }
         .btn-secondary { background: #2563eb; }
         .btn-secondary:hover { background: #1d4ed8; }
         .hidden { display: none; }
         .form-box { margin-bottom: 15px; }
+        .task-card, .withdraw-box { background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px; border-radius: 6px; margin-bottom: 15px; }
+        .task-title { font-weight: bold; font-size: 16px; color: #1f2937; }
+        .task-reward { color: #16a34a; font-weight: bold; float: right; }
+        .balance-card { background: #16a34a; color: white; padding: 15px; border-radius: 6px; text-align: center; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -38,7 +42,7 @@
         <div id="signup-form" class="form-box hidden">
             <h3>নতুন অ্যাকাউন্ট তৈরি (রেজিস্ট্রেশন)</h3>
             <input type="email" id="signup-email" placeholder="আপনার ইমেইল প্রদান করুন">
-            <input type="password" id="signup-password" placeholder="নতুন পাসওয়ার্ড তৈরি করুন (কমপক্ষে ৬ অক্ষর)">
+            <input type="password" id="signup-password" placeholder="নতুন পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)">
             <button class="btn-secondary" onclick="handleSignup()">রেজিস্ট্রেশন</button>
             <p style="text-align: center; font-size: 14px;">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" onclick="switchForm('login')">লগইন করুন</a></p>
         </div>
@@ -46,12 +50,50 @@
 
     <!-- Dashboard Section -->
     <div id="dashboard-section" class="hidden">
-        <h3>স্বাগতম!</h3>
-        <p>ইমেইল: <b id="user-email"></b></p>
-        <button onclick="handleLogout()" style="background: #dc2626;">লগআউট</button>
+        <h3>স্বাগতম, <span id="user-email"></span></h3>
+        
+        <!-- Balance Display -->
+        <div class="balance-card">
+            <div style="font-size: 14px;">বর্তমান ব্যালেন্স</div>
+            <div style="font-size: 26px; font-weight: bold;">৳ <span id="user-balance">50.00</span></div>
+        </div>
+
+        <button onclick="handleLogout()" style="background: #dc2626; padding: 6px; font-size: 13px; margin-bottom: 15px;">লগআউট</button>
+
+        <!-- Withdraw Section -->
+        <div class="withdraw-box">
+            <h4 style="margin-top:0;">টাকা তুলুন (Withdraw Funds)</h4>
+            <select id="payment-method">
+                <option value="bKash">বিকাশ (bKash)</option>
+                <option value="Nagad">নগদ (Nagad)</option>
+                <option value="Rocket">রকেট (Rocket)</option>
+            </select>
+            <input type="number" id="withdraw-amount" placeholder="পরিমাণ (সর্বনিম্ন ৳ ৫০)">
+            <input type="text" id="account-number" placeholder="আপনার মোবাইল নম্বর দিন">
+            <button onclick="handleWithdraw()" style="background: #0284c7;">উইথড্র রিকোয়েস্ট পাঠান</button>
+        </div>
+
         <hr>
-        <h4>এভেইলেবল টাস্কসমূহ</h4>
-        <p>এই মুহূর্তে কোনো টাস্ক নেই।</p>
+
+        <h4>উপলব্ধ কাজসমূহ (Available Tasks)</h4>
+        
+        <!-- Task 1 -->
+        <div class="task-card">
+            <span class="task-title">ইউটিউব চ্যানেল সাবস্ক্রাইব করুন</span>
+            <span class="task-reward">৳ ৫.০০</span>
+            <p style="font-size: 13px; color: #6b7280; margin: 5px 0;">চ্যানেল সাবস্ক্রাইব করে প্রুফ জমা দিন।</p>
+            <input type="text" id="proof-1" placeholder="ইউটিউব চ্যানেল/ইউজারনেম দিন">
+            <button onclick="submitTask('ইউটিউব সাবস্ক্রাইব', 'proof-1')">কাজ জমা দিন</button>
+        </div>
+
+        <!-- Task 2 -->
+        <div class="task-card">
+            <span class="task-title">ফেসবুক পেজ লাইক দিন</span>
+            <span class="task-reward">৳ ৩.০০</span>
+            <p style="font-size: 13px; color: #6b7280; margin: 5px 0;">পেজে লাইক দিয়ে আপনার ইউজারনেম জমা দিন।</p>
+            <input type="text" id="proof-2" placeholder="আপনার ফেসবুক ইউজারনেম দিন">
+            <button onclick="submitTask('ফেসবুক লাইক', 'proof-2')">কাজ জমা দিন</button>
+        </div>
     </div>
 </div>
 
@@ -84,7 +126,6 @@
         if (error) {
             alert('লগইন ত্রুটি: ' + error.message);
         } else {
-            alert('সফলভাবে লগইন করা হয়েছে!');
             checkUser();
         }
     }
@@ -107,12 +148,40 @@
 
         if (error) {
             alert('রেজিস্ট্রেশন ত্রুটি: ' + error.message);
-        } else if (data.user && data.session === null) {
-            alert('রেজিস্ট্রেশন সফল হয়েছে! আপনার ইমেইল চেক করে অ্যাকাউন্ট ভেরিফাই করুন, অথবা Supabase থেকে Confirm email অফ করুন।');
         } else {
-            alert('অ্যাকাউন্ট সফলভাবে তৈরি ও লগইন হয়েছে!');
+            alert('অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!');
             checkUser();
         }
+    }
+
+    async function submitTask(taskName, proofInputId) {
+        const proof = document.getElementById(proofInputId).value;
+        if (!proof) {
+            alert('দয়া করে কাজের প্রমাণ (Proof) প্রদান করুন।');
+            return;
+        }
+        alert(`'${taskName}' কাজের জন্য আপনার প্রমাণ জমা হয়েছে! রিভিউ করে ব্যালেন্স যোগ করা হবে।`);
+        document.getElementById(proofInputId).value = '';
+    }
+
+    function handleWithdraw() {
+        const method = document.getElementById('payment-method').value;
+        const amount = document.getElementById('withdraw-amount').value;
+        const account = document.getElementById('account-number').value;
+
+        if (!amount || amount < 50) {
+            alert('দয়া করে সর্বনিম্ন ৫০ টাকা নির্বাচন করুন।');
+            return;
+        }
+
+        if (!account) {
+            alert('দয়া করে আপনার অ্যাকাউন্ট (মোবাইল) নম্বরটি দিন।');
+            return;
+        }
+
+        alert(`আপনার ৳${amount} টাকার ${method} উইথড্র রিকোয়েস্টটি সফলভাবে জমা নেওয়া হয়েছে!`);
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('account-number').value = '';
     }
 
     async function checkUser() {
