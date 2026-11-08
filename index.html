@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Micro Task Platform</title>
-  <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -31,9 +30,8 @@
 <body>
 
 <div class="container">
-  <!-- Auth Section -->
   <div id="auth-section">
-    <h2 id="auth-title">একাউন্টে প্রবেশ করুন</h2>
+    <h2>একাউন্টে প্রবেশ করুন</h2>
     <div class="form-group">
       <input type="email" id="email" placeholder="আপনার ইমেইল প্রদান করুন" />
     </div>
@@ -43,7 +41,6 @@
     <button onclick="handleAuth()">লগইন / রেজিস্ট্রেশন</button>
   </div>
 
-  <!-- Dashboard Section -->
   <div id="dashboard-section" class="hidden">
     <h2>ড্যাশবোর্ড</h2>
     <div class="balance-card">
@@ -59,7 +56,6 @@
 </div>
 
 <script>
-  // আপনার Supabase URL এবং Publishable Key এখানে সম্পূর্ণ বসানো হয়েছে
   const SUPABASE_URL = 'https://hpjutbhdljcttechlwce.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_zy_Z5WDk-6_uY2qX6QlNcg_YYy_9CfO'; 
   const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
