@@ -1,208 +1,240 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>মাইক্রো-টাস্ক প্ল্যাটফর্ম</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 450px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2, h3 { text-align: center; color: #16a34a; margin-bottom: 15px; }
-        input, select, button, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background: #16a34a; color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background: #15803d; }
-        .btn-secondary { background: #2563eb; }
-        .btn-secondary:hover { background: #1d4ed8; }
-        .hidden { display: none; }
-        .form-box { margin-bottom: 15px; }
-        .task-card, .withdraw-box { background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px; border-radius: 6px; margin-bottom: 15px; }
-        .task-title { font-weight: bold; font-size: 16px; color: #1f2937; }
-        .task-reward { color: #16a34a; font-weight: bold; float: right; }
-        .balance-card { background: #16a34a; color: white; padding: 15px; border-radius: 6px; text-align: center; margin-bottom: 15px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probit BD - Grow Together</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f8f6;
+    color: #26352e;
+}
+
+header {
+    background: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px #00000010;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #138b72;
+}
+
+.logo span {
+    color: #26352e;
+}
+
+nav {
+    background: #138b72;
+    padding: 13px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+button {
+    border: none;
+    border-radius: 7px;
+    padding: 11px 16px;
+    background: #138b72;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #08745d;
+}
+
+.language {
+    background: #26352e;
+}
+
+.hero {
+    text-align: center;
+    padding: 55px 20px;
+    background: linear-gradient(135deg,#e3f7ef,#ffffff);
+}
+
+.hero h1 {
+    color: #138b72;
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 25px auto;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px #00000010;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #138b72;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 9px 0;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.full {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.link {
+    color: #138b72;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.feature {
+    background: white;
+    padding: 20px 10px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px #00000008;
+}
+
+footer {
+    background: #26352e;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    margin-top: 35px;
+}
+
+@media(max-width:400px) {
+    .hero h1 {
+        font-size: 25px;
+    }
+
+    nav a {
+        margin: 0 5px;
+        font-size: 13px;
+    }
+}
+</style>
 </head>
+
 <body>
 
+<header>
+    <div class="logo">Probit <span>BD</span></div>
+    <button class="language" onclick="changeLanguage()" id="langBtn">
+        English
+    </button>
+</header>
+
+<nav>
+    <a href="#" onclick="showHome()" data-bn="হোম" data-en="Home">হোম</a>
+    <a href="#" onclick="showLogin()" data-bn="লগইন" data-en="Login">লগইন</a>
+    <a href="#" onclick="showSignup()" data-bn="রেজিস্টার" data-en="Register">রেজিস্টার</a>
+</nav>
+
+<section id="home">
+    <div class="hero">
+        <h1 data-bn="Probit BD-তে স্বাগতম"
+            data-en="Welcome to Probit BD">
+            Probit BD-তে স্বাগতম
+        </h1>
+
+        <p data-bn="একটি আধুনিক সদস্য ও রেফারেল প্ল্যাটফর্ম।"
+           data-en="A modern membership and referral platform.">
+           একটি আধুনিক সদস্য ও রেফারেল প্ল্যাটফর্ম।
+        </p>
+
+        <button onclick="showSignup()"
+            data-bn="নতুন অ্যাকাউন্ট তৈরি করুন"
+            data-en="Create Account">
+            নতুন অ্যাকাউন্ট তৈরি করুন
+        </button>
+
+        <div class="features">
+            <div class="feature">👤<br>
+                <b data-bn="সদস্য অ্যাকাউন্ট"
+                   data-en="Member Account">সদস্য অ্যাকাউন্ট</b>
+            </div>
+
+            <div class="feature">🔗<br>
+                <b data-bn="রেফারেল সিস্টেম"
+                   data-en="Referral System">রেফারেল সিস্টেম</b>
+            </div>
+
+            <div class="feature">🔐<br>
+                <b data-bn="নিরাপদ লগইন"
+                   data-en="Secure Login">নিরাপদ লগইন</b>
+            </div>
+
+            <div class="feature">🌐<br>
+                <b data-bn="দুই ভাষার সুবিধা"
+                   data-en="Two Languages">দুই ভাষার সুবিধা</b>
+            </div>
+        </div>
+    </div>
+</section>
+
 <div class="container">
-    <h2>মাইক্রো-টাস্ক প্ল্যাটফর্ম</h2>
-    
-    <!-- Auth Section -->
-    <div id="auth-section">
-        <!-- Login Form -->
-        <div id="login-form" class="form-box">
-            <h3>একাউন্টে প্রবেশ করুন (লগইন)</h3>
-            <input type="email" id="login-email" placeholder="আপনার ইমেইল প্রদান করুন">
-            <input type="password" id="login-password" placeholder="পাসওয়ার্ড প্রদান করুন">
-            <button onclick="handleLogin()">লগইন</button>
-            <p style="text-align: center; font-size: 14px;">অ্যাকাউন্ট নেই? <a href="#" onclick="switchForm('signup')">রেজিস্ট্রেশন করুন</a></p>
-        </div>
 
-        <!-- Signup Form -->
-        <div id="signup-form" class="form-box hidden">
-            <h3>নতুন অ্যাকাউন্ট তৈরি (রেজিস্ট্রেশন)</h3>
-            <input type="email" id="signup-email" placeholder="আপনার ইমেইল প্রদান করুন">
-            <input type="password" id="signup-password" placeholder="নতুন পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)">
-            <button class="btn-secondary" onclick="handleSignup()">রেজিস্ট্রেশন</button>
-            <p style="text-align: center; font-size: 14px;">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#" onclick="switchForm('login')">লগইন করুন</a></p>
-        </div>
-    </div>
+    <div id="login" class="card hidden">
+        <h2 data-bn="লগইন করুন" data-en="Login">
+            লগইন করুন
+        </h2>
 
-    <!-- Dashboard Section -->
-    <div id="dashboard-section" class="hidden">
-        <h3>স্বাগতম, <span id="user-email"></span></h3>
-        
-        <!-- Balance Display -->
-        <div class="balance-card">
-            <div style="font-size: 14px;">বর্তমান ব্যালেন্স</div>
-            <div style="font-size: 26px; font-weight: bold;">৳ <span id="user-balance">50.00</span></div>
-        </div>
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
 
-        <button onclick="handleLogout()" style="background: #dc2626; padding: 6px; font-size: 13px; margin-bottom: 15px;">লগআউট</button>
+        <button class="full" onclick="demoMessage()"
+            data-bn="লগইন"
+            data-en="Login">লগইন</button>
 
-        <!-- Withdraw Section -->
-        <div class="withdraw-box">
-            <h4 style="margin-top:0;">টাকা তুলুন (Withdraw Funds)</h4>
-            <select id="payment-method">
-                <option value="bKash">বিকাশ (bKash)</option>
-                <option value="Nagad">নগদ (Nagad)</option>
-                <option value="Rocket">রকেট (Rocket)</option>
-            </select>
-            <input type="number" id="withdraw-amount" placeholder="পরিমাণ (সর্বনিম্ন ৳ ৫০)">
-            <input type="text" id="account-number" placeholder="আপনার মোবাইল নম্বর দিন">
-            <button onclick="handleWithdraw()" style="background: #0284c7;">উইথড্র রিকোয়েস্ট পাঠান</button>
-        </div>
-
-        <hr>
-
-        <h4>উপলব্ধ কাজসমূহ (Available Tasks)</h4>
-        
-        <!-- Task 1 -->
-        <div class="task-card">
-            <span class="task-title">ইউটিউব চ্যানেল সাবস্ক্রাইব করুন</span>
-            <span class="task-reward">৳ ৫.০০</span>
-            <p style="font-size: 13px; color: #6b7280; margin: 5px 0;">চ্যানেল সাবস্ক্রাইব করে প্রুফ জমা দিন।</p>
-            <input type="text" id="proof-1" placeholder="ইউটিউব চ্যানেল/ইউজারনেম দিন">
-            <button onclick="submitTask('ইউটিউব সাবস্ক্রাইব', 'proof-1')">কাজ জমা দিন</button>
-        </div>
-
-        <!-- Task 2 -->
-        <div class="task-card">
-            <span class="task-title">ফেসবুক পেজ লাইক দিন</span>
-            <span class="task-reward">৳ ৩.০০</span>
-            <p style="font-size: 13px; color: #6b7280; margin: 5px 0;">পেজে লাইক দিয়ে আপনার ইউজারনেম জমা দিন।</p>
-            <input type="text" id="proof-2" placeholder="আপনার ফেসবুক ইউজারনেম দিন">
-            <button onclick="submitTask('ফেসবুক লাইক', 'proof-2')">কাজ জমা দিন</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    const SUPABASE_URL = 'https://hpjutbhdljcttechlwce.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_zy_Z5WDk-6_uY2qX6QlNcg_YYy_9CfO';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    function switchForm(type) {
-        if (type === 'signup') {
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('signup-form').classList.remove('hidden');
-        } else {
-            document.getElementById('signup-form').classList.add('hidden');
-            document.getElementById('login-form').classList.remove('hidden');
-        }
-    }
-
-    async function handleLogin() {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-
-        if (!email || !password) {
-            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড প্রদান করুন।');
-            return;
-        }
-
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-        if (error) {
-            alert('লগইন ত্রুটি: ' + error.message);
-        } else {
-            checkUser();
-        }
-    }
-
-    async function handleSignup() {
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-
-        if (!email || !password) {
-            alert('দয়া করে ইমেইল এবং পাসওয়ার্ড প্রদান করুন।');
-            return;
-        }
-
-        if (password.length < 6) {
-            alert('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।');
-            return;
-        }
-
-        const { data, error } = await supabase.auth.signUp({ email, password });
-
-        if (error) {
-            alert('রেজিস্ট্রেশন ত্রুটি: ' + error.message);
-        } else {
-            alert('অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!');
-            checkUser();
-        }
-    }
-
-    async function submitTask(taskName, proofInputId) {
-        const proof = document.getElementById(proofInputId).value;
-        if (!proof) {
-            alert('দয়া করে কাজের প্রমাণ (Proof) প্রদান করুন।');
-            return;
-        }
-        alert(`'${taskName}' কাজের জন্য আপনার প্রমাণ জমা হয়েছে! রিভিউ করে ব্যালেন্স যোগ করা হবে।`);
-        document.getElementById(proofInputId).value = '';
-    }
-
-    function handleWithdraw() {
-        const method = document.getElementById('payment-method').value;
-        const amount = document.getElementById('withdraw-amount').value;
-        const account = document.getElementById('account-number').value;
-
-        if (!amount || amount < 50) {
-            alert('দয়া করে সর্বনিম্ন ৫০ টাকা নির্বাচন করুন।');
-            return;
-        }
-
-        if (!account) {
-            alert('দয়া করে আপনার অ্যাকাউন্ট (মোবাইল) নম্বরটি দিন।');
-            return;
-        }
-
-        alert(`আপনার ৳${amount} টাকার ${method} উইথড্র রিকোয়েস্টটি সফলভাবে জমা নেওয়া হয়েছে!`);
-        document.getElementById('withdraw-amount').value = '';
-        document.getElementById('account-number').value = '';
-    }
-
-    async function checkUser() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-            document.getElementById('auth-section').classList.add('hidden');
-            document.getElementById('dashboard-section').classList.remove('hidden');
-            document.getElementById('user-email').innerText = session.user.email;
-        } else {
-            document.getElementById('auth-section').classList.remove('hidden');
-            document.getElementById('dashboard-section').classList.add('hidden');
-        }
-    }
-
-    async function handleLogout() {
-        await supabase.auth.signOut();
-        checkUser();
-    }
-
-    checkUser();
-</script>
-
-</body>
-</html>
+        <p style="text-align:center;margin-top:15px">
+            <span data
